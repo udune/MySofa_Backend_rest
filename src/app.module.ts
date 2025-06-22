@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { EmailModule } from './apis/accounts/email.module';
 import { ProductsModule } from './apis/products/products.module';
 import { MyItemsModule } from './apis/myitems/myitems.module';
@@ -15,16 +13,7 @@ import { CustomSession } from './apis/custom_session/entities/custom_session.ent
 
 @Module({
   imports: [
-    EmailModule,
-    ProductsModule,
-    MyItemsModule,
-    UsersModule,
-    CustomSessionModule,
     ConfigModule.forRoot(),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      autoSchemaFile: 'src/commons/graphql/schema.gql',
-    }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',
       host: process.env.DATABASE_HOST,
@@ -36,7 +25,11 @@ import { CustomSession } from './apis/custom_session/entities/custom_session.ent
       synchronize: true,
       logging: true,
     }),
-    TypeOrmModule.forFeature([Product, MyItem, User, CustomSession]),
+    EmailModule,
+    ProductsModule,
+    MyItemsModule,
+    UsersModule,
+    CustomSessionModule,
   ],
 })
 export class AppModule {}

@@ -1,31 +1,41 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CustomSessionService } from './custom_session.service';
 import { CustomSession } from './entities/custom_session.entity';
 import { CreateCustomSessionInput } from './dto/create-custom_session.input';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 
-@Resolver(() => CustomSession)
-export class CustomSessionResolver {
+@Controller('custom-session')
+export class CustomSessionController {
   constructor(private readonly customSessionService: CustomSessionService) {}
 
-  @Query(() => CustomSession, { nullable: true })
-  fetchCustomSession(
-    @Args('sessionId')
+  @Get(':sessionId')
+  getCustomSession(
+    @Param('sessionId', ParseIntPipe)
     sessionId: number,
   ): Promise<CustomSession | null> {
     return this.customSessionService.findOneBySessionId({ sessionId });
   }
 
-  @Mutation(() => CustomSession)
+  @Post()
   createCustomSession(
-    @Args('productId', { type: () => Int })
-    productId: number,
-    @Args('userId', { type: () => Int })
-    userId: number,
-    @Args('createCustomSessionInput')
-    createCustomSessionInput: CreateCustomSessionInput,
+    @Body()
+    body: {
+      userId: number;
+      productId: number;
+      createCustomSessionInput: CreateCustomSessionInput;
+    },
   ): Promise<CustomSession | null> {
-    const user = { id: userId } as any;
-    const product = { id: productId } as any;
+    const { userId, productId, createCustomSessionInput } = body;
+
+    const user = { user_id: userId } as any;
+    const product = { product_id: productId } as any;
+
     return this.customSessionService.create({
       createCustomSessionInput,
       user,
