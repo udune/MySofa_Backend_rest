@@ -5,11 +5,7 @@ import { EmailModule } from './apis/accounts/email.module';
 import { ProductsModule } from './apis/products/products.module';
 import { MyItemsModule } from './apis/myitems/myitems.module';
 import { UsersModule } from './apis/accounts/users.module';
-import { MyItem } from './apis/myitems/entities/myitem.entity';
-import { User } from './apis/accounts/entities/user.entity';
-import { Product } from './apis/products/entities/product.entity';
 import { CustomSessionModule } from './apis/custom_session/custom_session.module';
-import { CustomSession } from './apis/custom_session/entities/custom_session.entity';
 
 @Module({
   imports: [

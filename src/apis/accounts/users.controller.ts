@@ -8,9 +8,17 @@ import {
   ConflictException,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Post,
 } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiConflictResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiConflictResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('Users')
 @Controller('users')
@@ -21,6 +29,7 @@ export class UsersController {
   ) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: '회원가입',
     description: '새로운 유저를 등록합니다.',
@@ -43,7 +52,11 @@ export class UsersController {
     }
 
     const newUser = await this.usersService.create(createUserInput);
-    await this.emailService.sendWelcomeEmail(email, nickname);
+
+    this.emailService.sendWelcomeEmail(email, nickname).catch((error) => {
+      console.error('Welcome email send failed: ', error);
+    });
+
     return newUser;
   }
 
@@ -57,7 +70,7 @@ export class UsersController {
     description: '유저 목록 조회 성공',
     type: [User],
   })
-  getAllUsers(): Promise<User[]> {
+  async getAllUsers(): Promise<User[]> {
     return this.usersService.findAll();
   }
 }

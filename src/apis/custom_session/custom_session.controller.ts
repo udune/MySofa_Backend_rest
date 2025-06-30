@@ -9,12 +9,20 @@ import {
   ParseIntPipe,
   Post,
 } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('CustomSession')
 @Controller('custom-session')
 export class CustomSessionController {
   constructor(private readonly customSessionService: CustomSessionService) {}
 
   @Get(':sessionId')
+  @ApiOperation({ summary: '세션 조회' })
+  @ApiResponse({
+    status: 200,
+    description: '세션 조회 성공',
+    type: CustomSession,
+  })
   getCustomSession(
     @Param('sessionId', ParseIntPipe)
     sessionId: number,
@@ -23,6 +31,12 @@ export class CustomSessionController {
   }
 
   @Post()
+  @ApiOperation({ summary: '커스텀 세션 생성 또는 수정' })
+  @ApiResponse({
+    status: 201,
+    description: '세션 저장 성공',
+    type: CustomSession,
+  })
   createCustomSession(
     @Body()
     body: {

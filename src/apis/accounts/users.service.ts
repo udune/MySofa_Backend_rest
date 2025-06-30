@@ -7,13 +7,15 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
+  private readonly ROUNDS = 12;
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
 
   async create(input: CreateUserInput): Promise<User> {
-    const hashedPassword = await bcrypt.hash(input.password, 10);
+    const hashedPassword = await bcrypt.hash(input.password, this.ROUNDS);
     const user = this.userRepository.create({
       ...input,
       password: hashedPassword,
@@ -24,11 +26,23 @@ export class UsersService {
   async findAll(): Promise<User[]> {
     return this.userRepository.find({
       relations: ['myitems', 'custom_sessions'],
+      select: ['user_id', 'email', 'nickname', 'role'],
     });
   }
 
   async findByEmail(email: string): Promise<User | null> {
     return this.userRepository.findOne({ where: { email } });
+  }
+
+  async findById(id: number): Promise<User | null> {
+    const user = await this.userRepository.findOne({
+      where: { user_id: id },
+      select: ['user_id', 'email', 'nickname', 'role'],
+    });
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    return user;
   }
 
   async delete(id: number): Promise<boolean> {
