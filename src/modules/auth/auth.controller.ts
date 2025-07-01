@@ -40,21 +40,15 @@ export class AuthController {
     @Body() dto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    try {
-      const { email, password } = dto;
-      const tokens: IAuthServiceTokens = await this.authService.login({
-        email,
-        password,
-      });
+    const { email, password } = dto;
+    const tokens: IAuthServiceTokens = await this.authService.login({
+      email,
+      password,
+    });
 
-      this.setAuthCookies(res, tokens);
+    this.setAuthCookies(res, tokens);
 
-      return { message: '로그인 성공', accessToken: tokens.accessToken };
-    } catch (error) {
-      throw new BadRequestException(
-        '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.',
-      );
-    }
+    return { message: '로그인 성공', accessToken: tokens.accessToken };
   }
 
   @Post('logout')
@@ -84,27 +78,21 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
-    try {
-      const user = req.user as { userId: string; refreshToken: string };
-      const newAccessToken = await this.authService.refreshAccessToken(
-        user.userId,
-      );
-      res.cookie('accessToken', newAccessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 3600000,
-      });
+    const user = req.user as { userId: string; refreshToken: string };
+    const newAccessToken = await this.authService.refreshAccessToken(
+      user.userId,
+    );
+    res.cookie('accessToken', newAccessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 3600000,
+    });
 
-      return {
-        message: 'Access Token이 갱신되었습니다.',
-        accessToken: newAccessToken,
-      };
-    } catch (error) {
-      throw new BadRequestException(
-        'Refresh Token이 유효하지 않거나 만료되었습니다.',
-      );
-    }
+    return {
+      message: 'Access Token이 갱신되었습니다.',
+      accessToken: newAccessToken,
+    };
   }
 
   private setAuthCookies(res: Response, tokens: IAuthServiceTokens) {
