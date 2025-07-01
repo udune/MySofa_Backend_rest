@@ -1,30 +1,35 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
-import { EmailModule } from './apis/accounts/email.module';
-import { ProductsModule } from './apis/products/products.module';
-import { MyItemsModule } from './apis/myitems/myitems.module';
-import { UsersModule } from './apis/accounts/users.module';
-import { CustomSessionModule } from './apis/custom_session/custom_session.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { EmailModule } from './modules/users/email.module';
+import { ProductsModule } from './modules/products/products.module';
+import { MyItemsModule } from './modules/my-items/myitems.module';
+import { UsersModule } from './modules/users/users.module';
+import { CustomSessionModule } from './modules/custom_sessions/custom_session.module';
+import { AppConfig } from './config/app.config';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-      type: process.env.DATABASE_TYPE as 'mysql',
-      host: process.env.DATABASE_HOST,
-      port: Number(process.env.DATABASE_PORT),
-      username: process.env.DATABASE_USERNAME,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_DATABASE,
-      entities: [__dirname + '/apis/**/*.entity.{ts,js}'],
-      synchronize: true,
-      logging: true,
+    TypeOrmModule.forRootAsync({
+      useFactory: (configService: ConfigService<AppConfig>) => ({
+        type: 'mysql',
+        host: configService.get('DATABASE_HOST'),
+        port: configService.get('DATABASE_PORT'),
+        username: configService.get('DATABASE_USERNAME'),
+        password: configService.get('DATABASE_PASSWORD'),
+        database: configService.get('DATABASE_DATABASE'),
+        entities: [__dirname + '/modules/**/*.entity.{ts,js}'],
+        synchronize: true,
+        logging: true,
+      }),
     }),
+    AuthModule,
+    UsersModule,
     EmailModule,
     ProductsModule,
     MyItemsModule,
-    UsersModule,
     CustomSessionModule,
   ],
 })
