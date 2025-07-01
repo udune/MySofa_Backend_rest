@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/require-await */
 import {
-  BadRequestException,
   Body,
   Controller,
   HttpCode,
