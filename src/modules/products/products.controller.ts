@@ -1,14 +1,14 @@
 import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
-import { CreateProductInput } from './dto/create-product.input';
-import { UpdateProductInput } from './dto/update-product.input';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import {
   Body,
   Controller,
   Delete,
   Get,
   Param,
-  ParseIntPipe,
+  ParseUUIDPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -30,14 +30,14 @@ export class ProductsController {
     return this.productsService.findAll();
   }
 
-  @Get(':productId')
+  @Get(':id')
   @ApiOperation({ summary: '상품 조회' })
   @ApiResponse({ status: 201, description: '상품 조회 성공', type: Product })
   async getProduct(
-    @Param('productId', ParseIntPipe)
-    productId: number,
+    @Param('id', ParseUUIDPipe)
+    id: string,
   ): Promise<Product | null> {
-    return this.productsService.findOne({ productId });
+    return this.productsService.findOne({ id });
   }
 
   @Post()
@@ -45,26 +45,26 @@ export class ProductsController {
   @ApiResponse({ status: 201, description: '상품 등록 성공', type: Product })
   async createProduct(
     @Body()
-    createProductInput: CreateProductInput,
+    createProductInput: CreateProductDto,
   ): Promise<Product> {
     return this.productsService.create({ createProductInput });
   }
 
-  @Patch(':productId')
+  @Patch(':id')
   updateProduct(
-    @Param('productId', ParseIntPipe)
-    productId: number,
+    @Param('id', ParseUUIDPipe)
+    id: string,
     @Body()
-    updateProductInput: UpdateProductInput,
+    updateProductInput: UpdateProductDto,
   ): Promise<Product | null> {
-    return this.productsService.update({ productId, updateProductInput });
+    return this.productsService.update({ id, updateProductInput });
   }
 
-  @Delete(':productId')
+  @Delete(':id')
   async deleteProduct(
-    @Param('productId', ParseIntPipe)
-    productId: number,
+    @Param('id', ParseUUIDPipe)
+    id: string,
   ): Promise<boolean> {
-    return this.productsService.delete({ productId });
+    return this.productsService.delete({ id });
   }
 }

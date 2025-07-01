@@ -1,18 +1,18 @@
-import { CreateProductInput } from '../dto/create-product.input';
-import { UpdateProductInput } from '../dto/update-product.input';
+import { CreateProductDto } from '../dto/create-product.dto';
+import { UpdateProductDto } from '../dto/update-product.dto';
 import { Product } from '../entities/product.entity';
 
 export interface IProductsServiceCreate {
-  createProductInput: CreateProductInput;
+  createProductInput: CreateProductDto;
 }
 
 export interface IProductsServiceUpdate {
-  productId: number;
-  updateProductInput: UpdateProductInput;
+  id: string;
+  updateProductInput: UpdateProductDto;
 }
 
 export interface IProductsServiceDelete {
-  productId: number;
+  id: string;
 }
 
 export interface IProductsServiceExist {
@@ -20,5 +20,5 @@ export interface IProductsServiceExist {
 }
 
 export interface IProductsServiceFindOne {
-  productId: number;
+  id: string;
 }

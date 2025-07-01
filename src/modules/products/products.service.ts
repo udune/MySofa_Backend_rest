@@ -21,9 +21,9 @@ export class ProductsService {
     return this.productRepository.find({ relations: ['myitems'] });
   }
 
-  findOne({ productId }: IProductsServiceFindOne): Promise<Product | null> {
+  findOne({ id }: IProductsServiceFindOne): Promise<Product | null> {
     return this.productRepository.findOne({
-      where: { product_id: productId },
+      where: { id },
       relations: ['myitems'],
     });
   }
@@ -37,10 +37,10 @@ export class ProductsService {
   }
 
   async update({
-    productId,
+    id,
     updateProductInput,
   }: IProductsServiceUpdate): Promise<Product | null> {
-    const product = await this.findOne({ productId });
+    const product = await this.findOne({ id });
 
     this.checkExist({ product });
 
@@ -49,10 +49,8 @@ export class ProductsService {
     return this.productRepository.save(update);
   }
 
-  async delete({ productId }: IProductsServiceDelete): Promise<boolean> {
-    const result = await this.productRepository.softDelete({
-      product_id: productId,
-    });
+  async delete({ id }: IProductsServiceDelete): Promise<boolean> {
+    const result = await this.productRepository.softDelete({ id });
     return !!result.affected;
   }
 

@@ -24,6 +24,7 @@ import { AuthModule } from './modules/auth/auth.module';
         synchronize: true,
         logging: true,
       }),
+      inject: [ConfigService],
     }),
     AuthModule,
     UsersModule,

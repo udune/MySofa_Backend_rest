@@ -42,7 +42,7 @@ export class AuthService {
   }
 
   generateAccessToken({ user }: IAuthServiceGetAccessToken): string {
-    const secret = this.configService.get<string>('TOKEN_PASSWORD');
+    const secret = this.configService.get<string>('JWT_ACCESS_SECRET');
     if (!secret) {
       throw new Error('JWT 액세스 토큰 시크릿이 없습니다.');
     }
@@ -51,7 +51,7 @@ export class AuthService {
   }
 
   generateRefreshToken({ user }: IAuthServiceGetAccessToken): string {
-    const secret = this.configService.get<string>('TOKEN_REFRESH_PASSWORD');
+    const secret = this.configService.get<string>('JWT_REFRESH_SECRET');
     if (!secret) {
       throw new Error('JWT 리프레시 토큰 시크릿이 없습니다.');
     }
