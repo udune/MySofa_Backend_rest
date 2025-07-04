@@ -32,11 +32,13 @@ export class MyItemsService {
   }
 
   create({ createMyitemDto }: IMyItemsServiceCreate): Promise<MyItem> {
-    const result = this.myitemRepository.save({
-      ...createMyitemDto,
-    });
+    const { user_id, product_id, ...itemData } = createMyitemDto;
 
-    return result;
+    return this.myitemRepository.save({
+      ...itemData,
+      user: { id: user_id } as any,
+      product: { id: product_id } as any,
+    });
   }
 
   async update({
