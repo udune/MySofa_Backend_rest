@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MyItem } from './entities/myitem.entity';
@@ -46,7 +47,17 @@ export class MyItemsService {
 
     this.checkExist({ myitem });
 
-    const update = { ...myitem, ...updateMyitemDto };
+    const { user_id, product_id, ...itemData } = updateMyitemDto;
+
+    const updateData: any = { ...itemData };
+    if (user_id) {
+      updateData.user = { id: user_id };
+    }
+    if (product_id) {
+      updateData.product = { id: product_id };
+    }
+
+    const update = { ...myitem, ...updateData };
 
     return this.myitemRepository.save(update);
   }

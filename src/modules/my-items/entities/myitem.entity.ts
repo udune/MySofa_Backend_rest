@@ -11,7 +11,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
 @Entity('myitems')
 @Index(['name', 'deleted_at'])
@@ -25,38 +25,85 @@ export class MyItem {
   })
   id: string;
 
-  @Column()
+  @Column({ length: 100 })
+  @ApiProperty({
+    description: '나의 상품명',
+    example: 'classicsofa, modularsofa, privatesofa, roungesofa',
+    maxLength: 100,
+  })
   name: string;
 
-  @Column()
+  @Column({ length: 100 })
+  @ApiProperty({
+    description: '나의 커스텀 상품명',
+    example: '나만의 특별한 소파',
+    maxLength: 100,
+  })
   custom_name: string;
 
-  @Column()
+  @Column({ length: 50 })
+  @ApiProperty({
+    description: '색상',
+    example: 'gray, beige, black',
+    maxLength: 50,
+  })
   color: string;
 
-  @Column()
+  @Column({ length: 50 })
+  @ApiProperty({
+    description: '재질',
+    example: 'fabric, leather',
+    maxLength: 50,
+  })
   material: string;
 
-  @Column()
+  @Column({ length: 50 })
+  @ApiProperty({
+    description: '크기',
+    example: 'small, large',
+    maxLength: 50,
+  })
   size: string;
 
-  @Column()
+  @Column({ length: 50 })
+  @ApiProperty({
+    description: '모델 타입',
+    example: 'a, b',
+    maxLength: 50,
+  })
   model_type: string;
 
   @CreateDateColumn()
+  @ApiProperty({
+    description: '생성일',
+    example: '2025-01-01T00:00:00.000Z',
+  })
   created_at: Date;
 
   @UpdateDateColumn()
+  @ApiProperty({
+    description: '수정일',
+    example: '2025-01-01T00:00:00.000Z',
+  })
   updated_at: Date;
 
   @DeleteDateColumn()
+  @ApiHideProperty()
   deleted_at: Date;
 
   @ManyToOne(() => User, (user) => user.my_items)
   @JoinColumn({ name: 'user_id' })
+  @ApiProperty({
+    description: '유저 정보',
+    type: () => User,
+  })
   user: User;
 
   @ManyToOne(() => Product, (product) => product.my_items)
   @JoinColumn({ name: 'product_id' })
+  @ApiProperty({
+    description: '상품 정보',
+    type: () => Product,
+  })
   product: Product;
 }
