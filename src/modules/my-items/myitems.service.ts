@@ -23,37 +23,37 @@ export class MyItemsService {
     });
   }
 
-  async findOne({ myitemId }: IMyItemsServiceFindOne): Promise<MyItem | null> {
+  async findOne({ id }: IMyItemsServiceFindOne): Promise<MyItem | null> {
     return this.myitemRepository.findOne({
-      where: { myitem_id: myitemId },
+      where: { id },
       relations: ['user', 'product'],
     });
   }
 
-  create({ createMyitemInput }: IMyItemsServiceCreate): Promise<MyItem> {
+  create({ createMyitemDto }: IMyItemsServiceCreate): Promise<MyItem> {
     const result = this.myitemRepository.save({
-      ...createMyitemInput,
+      ...createMyitemDto,
     });
 
     return result;
   }
 
   async update({
-    myitemId,
-    updateMyitemInput,
+    id,
+    updateMyitemDto,
   }: IMyItemsServiceUpdate): Promise<MyItem | null> {
-    const myitem = await this.findOne({ myitemId });
+    const myitem = await this.findOne({ id });
 
     this.checkExist({ myitem });
 
-    const update = { ...myitem, ...updateMyitemInput };
+    const update = { ...myitem, ...updateMyitemDto };
 
     return this.myitemRepository.save(update);
   }
 
-  async delete({ myitemId }: IMyItemsServiceDelete): Promise<boolean> {
+  async delete({ id }: IMyItemsServiceDelete): Promise<boolean> {
     const result = await this.myitemRepository.softDelete({
-      myitem_id: myitemId,
+      id,
     });
     return !!result.affected;
   }

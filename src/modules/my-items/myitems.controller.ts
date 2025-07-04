@@ -1,14 +1,14 @@
 import { MyItemsService } from './myitems.service';
 import { MyItem } from './entities/myitem.entity';
-import { CreateMyItemInput } from './dto/create-myitem.input';
-import { UpdateMyItemInput } from './dto/update-myitem.input';
+import { CreateMyItemDto } from './dto/create-myitem.dto';
+import { UpdateMyItemDto } from './dto/update-myitem.dto';
 import {
   Body,
   Controller,
   Delete,
   Get,
   Param,
-  ParseIntPipe,
+  ParseUUIDPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -26,14 +26,14 @@ export class MyItemsController {
     return this.myitemsService.findAll();
   }
 
-  @Get(':myitemId')
+  @Get(':id')
   @ApiOperation({ summary: '마이아이템 조회' })
   @ApiResponse({ status: 201, description: '조회 성공', type: MyItem })
   async getMyItem(
-    @Param('myitemId', ParseIntPipe)
-    myitemId: number,
+    @Param('id', ParseUUIDPipe)
+    id: string,
   ): Promise<MyItem | null> {
-    return this.myitemsService.findOne({ myitemId });
+    return this.myitemsService.findOne({ id });
   }
 
   @Post()
@@ -45,26 +45,26 @@ export class MyItemsController {
   })
   async createMyItem(
     @Body()
-    createMyitemInput: CreateMyItemInput,
+    createMyitemDto: CreateMyItemDto,
   ): Promise<MyItem> {
-    return this.myitemsService.create({ createMyitemInput });
+    return this.myitemsService.create({ createMyitemDto });
   }
 
-  @Patch(':myitemId')
+  @Patch(':id')
   async updateMyItem(
-    @Param('myitemId', ParseIntPipe)
-    myitemId: number,
+    @Param('id', ParseUUIDPipe)
+    id: string,
     @Body()
-    updateMyitemInput: UpdateMyItemInput,
+    updateMyitemDto: UpdateMyItemDto,
   ): Promise<MyItem | null> {
-    return this.myitemsService.update({ myitemId, updateMyitemInput });
+    return this.myitemsService.update({ id, updateMyitemDto });
   }
 
-  @Delete(':myitemId')
+  @Delete(':id')
   async deleteMyItem(
-    @Param('myitemId', ParseIntPipe)
-    myitemId: number,
+    @Param('id', ParseUUIDPipe)
+    id: string,
   ): Promise<boolean> {
-    return this.myitemsService.delete({ myitemId });
+    return this.myitemsService.delete({ id });
   }
 }

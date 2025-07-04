@@ -14,6 +14,7 @@ export class CreateUserDto {
     description: '사용자 닉네임',
     minLength: 2,
     maxLength: 20,
+    pattern: '^[가-힣a-zA-Z0-9_]+$',
   })
   @IsNotEmpty({ message: '닉네임을 입력해주세요.' })
   @IsString({ message: '닉네임은 문자열이어야 합니다.' })
@@ -27,6 +28,8 @@ export class CreateUserDto {
   @ApiProperty({
     example: 'sofa@naver.com',
     description: '이메일 주소',
+    format: 'email',
+    maxLength: 100,
   })
   @IsEmail({}, { message: '올바른 이메일 형식이 아닙니다.' })
   @IsNotEmpty({ message: '이메일을 입력해주세요.' })
@@ -37,6 +40,7 @@ export class CreateUserDto {
     example: 'securePassword123',
     description: '비밀번호 (8자 이상, 영문+숫자+특수문자 조합)',
     minLength: 8,
+    pattern: '^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]',
   })
   @IsNotEmpty({ message: '비밀번호를 입력해주세요.' })
   @IsString({ message: '비밀번호는 문자열이어야 합니다.' })

@@ -5,24 +5,25 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('myitems')
+@Index(['name', 'deleted_at'])
+@Index(['created_at', 'deleted_at'])
 export class MyItem {
-  @PrimaryGeneratedColumn()
-  myitem_id: number;
-
-  @ManyToOne(() => User, (user) => user.myitems)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
-
-  @ManyToOne(() => Product, (product) => product.myitems)
-  @JoinColumn({ name: 'product_id' })
-  product: Product;
+  @PrimaryGeneratedColumn('uuid')
+  @ApiProperty({
+    description: '나의 상품 ID',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    format: 'uuid',
+  })
+  id: string;
 
   @Column()
   name: string;
@@ -43,11 +44,19 @@ export class MyItem {
   model_type: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updated_at: Date;
 
   @DeleteDateColumn()
-  deletedAt: Date;
+  deleted_at: Date;
+
+  @ManyToOne(() => User, (user) => user.my_items)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
+  @ManyToOne(() => Product, (product) => product.my_items)
+  @JoinColumn({ name: 'product_id' })
+  product: Product;
 }

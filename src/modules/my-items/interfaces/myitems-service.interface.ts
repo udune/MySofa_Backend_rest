@@ -1,18 +1,18 @@
-import { CreateMyItemInput } from '../dto/create-myitem.input';
-import { UpdateMyItemInput } from '../dto/update-myitem.input';
+import { CreateMyItemDto } from '../dto/create-myitem.dto';
+import { UpdateMyItemDto } from '../dto/update-myitem.dto';
 import { MyItem } from '../entities/myitem.entity';
 
 export interface IMyItemsServiceCreate {
-  createMyitemInput: CreateMyItemInput;
+  createMyitemDto: CreateMyItemDto;
 }
 
 export interface IMyItemsServiceUpdate {
-  myitemId: number;
-  updateMyitemInput: UpdateMyItemInput;
+  id: string;
+  updateMyitemDto: UpdateMyItemDto;
 }
 
 export interface IMyItemsServiceDelete {
-  myitemId: number;
+  id: string;
 }
 
 export interface IMyItemsServiceExist {
@@ -20,5 +20,5 @@ export interface IMyItemsServiceExist {
 }
 
 export interface IMyItemsServiceFindOne {
-  myitemId: number;
+  id: string;
 }

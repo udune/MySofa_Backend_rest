@@ -27,7 +27,7 @@ export class CustomSessionService {
     sessionId,
   }: ICustomSessionServiceFindOneBySessionId): Promise<CustomSession | null> {
     return this.customSessionRepository.findOne({
-      where: { session_id: Number(sessionId) },
+      where: { id: sessionId },
     });
   }
 
@@ -42,7 +42,7 @@ export class CustomSessionService {
 
     if (existing) {
       await this.customSessionRepository.update(
-        { session_id: existing.session_id },
+        { id: existing.id },
         {
           ...createCustomSessionInput,
           user,
@@ -50,7 +50,7 @@ export class CustomSessionService {
         },
       );
       return this.customSessionRepository.findOneBy({
-        session_id: existing.session_id,
+        id: existing.id,
       });
     }
 

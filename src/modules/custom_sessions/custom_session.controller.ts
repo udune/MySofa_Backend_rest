@@ -1,12 +1,12 @@
 import { CustomSessionService } from './custom_session.service';
 import { CustomSession } from './entities/custom_session.entity';
-import { CreateCustomSessionInput } from './dto/create-custom_session.input';
+import { CreateCustomSessionDto } from './dto/create-custom_session.dto';
 import {
   Body,
   Controller,
   Get,
   Param,
-  ParseIntPipe,
+  ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -24,8 +24,8 @@ export class CustomSessionController {
     type: CustomSession,
   })
   getCustomSession(
-    @Param('sessionId', ParseIntPipe)
-    sessionId: number,
+    @Param('sessionId', ParseUUIDPipe)
+    sessionId: string,
   ): Promise<CustomSession | null> {
     return this.customSessionService.findOneBySessionId({ sessionId });
   }
@@ -42,7 +42,7 @@ export class CustomSessionController {
     body: {
       userId: number;
       productId: number;
-      createCustomSessionInput: CreateCustomSessionInput;
+      createCustomSessionInput: CreateCustomSessionDto;
     },
   ): Promise<CustomSession | null> {
     const { userId, productId, createCustomSessionInput } = body;

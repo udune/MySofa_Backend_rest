@@ -11,25 +11,40 @@ import {
 } from 'typeorm';
 import { UserRole } from '../enums/role.enum';
 import { CustomSession } from '../../custom_sessions/entities/custom_session.entity';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  @ApiProperty({ description: '사용자 ID' })
+  @ApiProperty({
+    description: '유저 ID',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    format: 'uuid',
+  })
   id: string;
 
   @Column({ length: 50 })
   @Index()
-  @ApiProperty({ description: '닉네임', maxLength: 50 })
+  @ApiProperty({
+    description: '닉네임',
+    example: '소파왕',
+    maxLength: 50,
+    minLength: 2,
+  })
   nickname: string;
 
   @Column({ unique: true, length: 100 })
   @Index()
-  @ApiProperty({ description: '이메일' })
+  @ApiProperty({
+    description: '이메일',
+    example: 'sofa@example.com',
+    format: 'email',
+    maxLength: 100,
+  })
   email: string;
 
   @Column()
+  @ApiHideProperty()
   password: string;
 
   @Column({
@@ -39,24 +54,45 @@ export class User {
   })
   @ApiProperty({
     enum: UserRole,
-    description: '사용자 역할',
+    description: '유저 역할',
+    example: UserRole.USER,
+    default: UserRole.USER,
   })
   role: UserRole;
 
   @OneToMany(() => MyItem, (myitem) => myitem.user)
-  myitems: MyItem[];
+  @ApiProperty({
+    description: '유저의 아이템 목록',
+    type: () => [MyItem],
+    required: false,
+  })
+  my_items: MyItem[];
 
   @OneToMany(() => CustomSession, (session) => session.user)
+  @ApiProperty({
+    description: '유저의 커스텀 세션 목록',
+    type: () => [CustomSession],
+    required: false,
+  })
   custom_sessions: CustomSession[];
 
   @CreateDateColumn()
-  @ApiProperty({ description: '생성일' })
-  createdAt: Date;
+  @ApiProperty({
+    description: '생성일',
+    example: '2025-01-01T00:00:00.000Z',
+    type: Date,
+  })
+  created_at: Date;
 
   @UpdateDateColumn()
-  @ApiProperty({ description: '수정일' })
-  updatedAt: Date;
+  @ApiProperty({
+    description: '수정일',
+    example: '2025-01-01T00:00:00.000Z',
+    type: Date,
+  })
+  updated_at: Date;
 
   @DeleteDateColumn()
-  deletedAt: Date;
+  @ApiHideProperty()
+  deleted_at: Date;
 }

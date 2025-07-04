@@ -1,6 +1,12 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class UpdateMyItemInput {
+export class CreateCustomSessionDto {
+  @IsNotEmpty()
+  user_id: string;
+
+  @IsNotEmpty()
+  product_id: string;
+
   @IsNotEmpty()
   @IsString()
   name: string;
