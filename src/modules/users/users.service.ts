@@ -48,7 +48,7 @@ export class UsersService {
 
   async findAll(): Promise<User[]> {
     return this.userRepository.find({
-      relations: ['myitems', 'custom_sessions'],
+      relations: ['my_items', 'custom_sessions'],
       select: ['id', 'email', 'nickname', 'role'],
     });
   }

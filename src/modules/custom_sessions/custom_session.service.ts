@@ -32,21 +32,21 @@ export class CustomSessionService {
   }
 
   async create({
-    createCustomSessionInput,
-    user,
-    product,
+    createCustomSessionDto,
   }: ICustomSessionServiceCreate): Promise<CustomSession | null> {
+    const { user_id, product_id, ...sessionData } = createCustomSessionDto;
+
     const existing = await this.customSessionRepository.findOne({
-      where: { user: { id: user.id } },
+      where: { user: { id: user_id } },
     });
 
     if (existing) {
       await this.customSessionRepository.update(
         { id: existing.id },
         {
-          ...createCustomSessionInput,
-          user,
-          product,
+          ...sessionData,
+          user: { id: user_id } as any,
+          product: { id: product_id } as any,
         },
       );
       return this.customSessionRepository.findOneBy({
@@ -55,9 +55,9 @@ export class CustomSessionService {
     }
 
     return this.customSessionRepository.save({
-      ...createCustomSessionInput,
-      user,
-      product,
+      ...sessionData,
+      user: { id: user_id } as any,
+      product: { id: product_id } as any,
     });
   }
 }

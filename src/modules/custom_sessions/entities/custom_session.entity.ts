@@ -11,13 +11,13 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Product } from '../../products/entities/product.entity';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
 @Entity('custom_session')
 @Index(['name', 'deleted_at'])
 @Index(['created_at', 'deleted_at'])
 export class CustomSession {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   @ApiProperty({
     description: '커스텀 상품 ID',
     example: '123e4567-e89b-12d3-a456-426614174000',
@@ -25,38 +25,85 @@ export class CustomSession {
   })
   id: string;
 
-  @Column()
+  @Column({ length: 100 })
+  @ApiProperty({
+    description: '상품명',
+    example: 'classicsofa, modularsofa, privatesofa, roungesofa',
+    maxLength: 100,
+  })
   name: string;
 
-  @Column()
+  @Column({ length: 100 })
+  @ApiProperty({
+    description: '커스텀 상품명',
+    example: '나만의 특별한 소파',
+    maxLength: 100,
+  })
   custom_name: string;
 
-  @Column()
+  @Column({ length: 50 })
+  @ApiProperty({
+    description: '색상',
+    example: 'gray, beige, black',
+    maxLength: 50,
+  })
   color: string;
 
-  @Column()
+  @Column({ length: 50 })
+  @ApiProperty({
+    description: '재질',
+    example: 'fabric, leather',
+    maxLength: 50,
+  })
   material: string;
 
-  @Column()
+  @Column({ length: 50 })
+  @ApiProperty({
+    description: '크기',
+    example: 'small, large',
+    maxLength: 50,
+  })
   size: string;
 
-  @Column()
+  @Column({ length: 50 })
+  @ApiProperty({
+    description: '모델 타입',
+    example: 'a, b',
+    maxLength: 50,
+  })
   model_type: string;
 
   @CreateDateColumn()
+  @ApiProperty({
+    description: '생성일',
+    example: '2025-01-01T00:00:00.000Z',
+  })
   created_at: Date;
 
   @UpdateDateColumn()
+  @ApiProperty({
+    description: '수정일',
+    example: '2025-01-01T00:00:00.000Z',
+  })
   updated_at: Date;
 
   @DeleteDateColumn()
+  @ApiHideProperty()
   deleted_at: Date;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
+  @ApiProperty({
+    description: '유저 정보',
+    type: () => User,
+  })
   user: User;
 
   @ManyToOne(() => Product)
   @JoinColumn({ name: 'product_id' })
+  @ApiProperty({
+    description: '상품 정보',
+    type: () => Product,
+  })
   product: Product;
 }

@@ -39,21 +39,10 @@ export class CustomSessionController {
   })
   createCustomSession(
     @Body()
-    body: {
-      userId: number;
-      productId: number;
-      createCustomSessionInput: CreateCustomSessionDto;
-    },
+    createCustomSessionDto: CreateCustomSessionDto,
   ): Promise<CustomSession | null> {
-    const { userId, productId, createCustomSessionInput } = body;
-
-    const user = { user_id: userId } as any;
-    const product = { product_id: productId } as any;
-
     return this.customSessionService.create({
-      createCustomSessionInput,
-      user,
-      product,
+      createCustomSessionDto,
     });
   }
 }

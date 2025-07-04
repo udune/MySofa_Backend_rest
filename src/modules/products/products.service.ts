@@ -18,13 +18,13 @@ export class ProductsService {
   ) {}
 
   async findAll(): Promise<Product[]> {
-    return this.productRepository.find({ relations: ['myitems'] });
+    return this.productRepository.find({ relations: ['my_items'] });
   }
 
   findOne({ id }: IProductsServiceFindOne): Promise<Product | null> {
     return this.productRepository.findOne({
       where: { id },
-      relations: ['myitems'],
+      relations: ['my_items'],
     });
   }
 

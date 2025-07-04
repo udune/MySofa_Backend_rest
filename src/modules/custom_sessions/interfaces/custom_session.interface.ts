@@ -1,5 +1,3 @@
-import { User } from '../../users/entities/user.entity';
-import { Product } from '../../products/entities/product.entity';
 import { CreateCustomSessionDto } from '../dto/create-custom_session.dto';
 
 export interface ICustomSessionServiceFindOneByUserId {
@@ -11,7 +9,5 @@ export interface ICustomSessionServiceFindOneBySessionId {
 }
 
 export interface ICustomSessionServiceCreate {
-  createCustomSessionInput: CreateCustomSessionDto;
-  user: User;
-  product: Product;
+  createCustomSessionDto: CreateCustomSessionDto;
 }
