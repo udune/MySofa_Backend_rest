@@ -45,9 +45,9 @@ export class ProductsController {
   @ApiResponse({ status: 201, description: '상품 등록 성공', type: Product })
   async createProduct(
     @Body()
-    createProductInput: CreateProductDto,
+    createProductDto: CreateProductDto,
   ): Promise<Product> {
-    return this.productsService.create({ createProductDto: createProductInput });
+    return this.productsService.create({ createProductDto });
   }
 
   @Patch(':id')

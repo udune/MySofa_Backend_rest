@@ -56,6 +56,12 @@ export class UsersService {
         role: true,
         created_at: true,
         updated_at: true,
+        my_items: {
+          id: true,
+        },
+        custom_sessions: {
+          id: true,
+        },
       },
     });
   }
@@ -67,6 +73,7 @@ export class UsersService {
   async findById(id: string): Promise<User | null> {
     const user = await this.userRepository.findOne({
       where: { id },
+      relations: ['my_items', 'custom_sessions'],
       select: {
         id: true,
         email: true,
@@ -74,6 +81,12 @@ export class UsersService {
         role: true,
         created_at: true,
         updated_at: true,
+        my_items: {
+          id: true,
+        },
+        custom_sessions: {
+          id: true,
+        },
       },
     });
     if (!user) {

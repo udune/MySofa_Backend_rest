@@ -95,17 +95,13 @@ export class Product {
   @ApiProperty({
     description: '이 상품을 기반으로 한 유저 아이템들',
     type: () => [MyItem],
+    example: [{ id: '456e7890-e89b-12d3-a456-426614174000' }],
     required: false,
   })
   my_items: MyItem[];
 
   @OneToMany(() => CustomSession, (session) => session.product, {
     cascade: true,
-  })
-  @ApiProperty({
-    description: '이 상품의 커스터마이징 세션들',
-    type: () => [CustomSession],
-    required: false,
   })
   custom_sessions: CustomSession[];
 }

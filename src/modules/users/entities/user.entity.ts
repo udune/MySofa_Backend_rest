@@ -63,6 +63,7 @@ export class User {
   @ApiProperty({
     description: '유저의 아이템 목록',
     type: () => [MyItem],
+    example: { id: 'd38e297d-882a-49e5-9bf8-602e0907e69c' },
     required: false,
   })
   my_items: MyItem[];
@@ -71,6 +72,7 @@ export class User {
   @ApiProperty({
     description: '유저의 커스텀 세션 목록',
     type: () => [CustomSession],
+    example: { id: 'd38e297d-882a-49e5-9bf8-602e0907e69c' },
     required: false,
   })
   custom_sessions: CustomSession[];

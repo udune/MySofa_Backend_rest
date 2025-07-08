@@ -96,6 +96,7 @@ export class MyItem {
   @ApiProperty({
     description: '유저 정보',
     type: () => User,
+    example: { id: '01012335-c08a-4443-b3ca-b1f77b7e8390' },
   })
   user: User;
 
@@ -104,6 +105,7 @@ export class MyItem {
   @ApiProperty({
     description: '상품 정보',
     type: () => Product,
+    example: { id: 'd38e297d-882a-49e5-9bf8-602e0907e69c' },
   })
   product: Product;
 }
