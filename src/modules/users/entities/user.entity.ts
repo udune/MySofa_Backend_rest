@@ -34,7 +34,6 @@ export class User {
   nickname: string;
 
   @Column({ unique: true, length: 100 })
-  @Index()
   @ApiProperty({
     description: '이메일',
     example: 'sofa@example.com',
