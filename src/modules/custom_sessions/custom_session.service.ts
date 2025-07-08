@@ -20,6 +20,24 @@ export class CustomSessionService {
   }: ICustomSessionServiceFindOneByUserId): Promise<CustomSession | null> {
     return this.customSessionRepository.findOne({
       where: { user: { id: userId } },
+      relations: ['user', 'product'],
+      select: {
+        id: true,
+        name: true,
+        custom_name: true,
+        color: true,
+        material: true,
+        size: true,
+        model_type: true,
+        created_at: true,
+        updated_at: true,
+        user: {
+          id: true,
+        },
+        product: {
+          id: true,
+        },
+      },
     });
   }
 
@@ -28,6 +46,24 @@ export class CustomSessionService {
   }: ICustomSessionServiceFindOneBySessionId): Promise<CustomSession | null> {
     return this.customSessionRepository.findOne({
       where: { id: sessionId },
+      relations: ['user', 'product'],
+      select: {
+        id: true,
+        name: true,
+        custom_name: true,
+        color: true,
+        material: true,
+        size: true,
+        model_type: true,
+        created_at: true,
+        updated_at: true,
+        user: {
+          id: true,
+        },
+        product: {
+          id: true,
+        },
+      },
     });
   }
 
@@ -49,15 +85,55 @@ export class CustomSessionService {
           product: { id: product_id } as any,
         },
       );
-      return this.customSessionRepository.findOneBy({
-        id: existing.id,
+      return this.customSessionRepository.findOne({
+        where: { id: existing.id },
+        relations: ['user', 'product'],
+        select: {
+          id: true,
+          name: true,
+          custom_name: true,
+          color: true,
+          material: true,
+          size: true,
+          model_type: true,
+          created_at: true,
+          updated_at: true,
+          user: {
+            id: true,
+          },
+          product: {
+            id: true,
+          },
+        },
       });
     }
 
-    return this.customSessionRepository.save({
+    const savedSession = await this.customSessionRepository.save({
       ...sessionData,
       user: { id: user_id } as any,
       product: { id: product_id } as any,
+    });
+
+    return this.customSessionRepository.findOne({
+      where: { id: savedSession.id },
+      relations: ['user', 'product'],
+      select: {
+        id: true,
+        name: true,
+        custom_name: true,
+        color: true,
+        material: true,
+        size: true,
+        model_type: true,
+        created_at: true,
+        updated_at: true,
+        user: {
+          id: true,
+        },
+        product: {
+          id: true,
+        },
+      },
     });
   }
 }

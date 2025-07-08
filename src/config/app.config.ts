@@ -7,6 +7,7 @@ export class AppConfig {
 
   @IsNumber()
   @Transform(({ value }) => parseInt(value))
+  @IsOptional()
   DATABASE_PORT: number;
 
   @IsString()

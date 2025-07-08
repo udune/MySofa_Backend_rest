@@ -47,20 +47,24 @@ export class ProductsController {
     @Body()
     createProductInput: CreateProductDto,
   ): Promise<Product> {
-    return this.productsService.create({ createProductInput });
+    return this.productsService.create({ createProductDto: createProductInput });
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: '상품 수정' })
+  @ApiResponse({ status: 200, description: '수정 성공', type: Product })
   updateProduct(
     @Param('id', ParseUUIDPipe)
     id: string,
     @Body()
-    updateProductInput: UpdateProductDto,
+    updateProductDto: UpdateProductDto,
   ): Promise<Product | null> {
-    return this.productsService.update({ id, updateProductInput });
+    return this.productsService.update({ id, updateProductDto });
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: '상품 삭제' })
+  @ApiResponse({ status: 200, description: '삭제 성공' })
   async deleteProduct(
     @Param('id', ParseUUIDPipe)
     id: string,

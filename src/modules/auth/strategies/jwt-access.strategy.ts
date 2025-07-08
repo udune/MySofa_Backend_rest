@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { AppConfig } from '@/src/config/app.config';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -12,7 +13,10 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt') {
     private readonly usersService: UsersService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+        (request) => request?.cookies?.accessToken,
+      ]),
       ignoreExpiration: false,
       secretOrKey: configService.get('JWT_ACCESS_SECRET', { infer: true })!,
     });

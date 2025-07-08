@@ -21,6 +21,24 @@ export class MyItemsService {
   async findAll(): Promise<MyItem[]> {
     return this.myitemRepository.find({
       relations: ['user', 'product'],
+      select: {
+        id: true,
+        name: true,
+        custom_name: true,
+        color: true,
+        material: true,
+        size: true,
+        model_type: true,
+        created_at: true,
+        updated_at: true,
+        deleted_at: true,
+        user: {
+          id: true,
+        },
+        product: {
+          id: true,
+        },
+      },
     });
   }
 
@@ -28,6 +46,24 @@ export class MyItemsService {
     return this.myitemRepository.findOne({
       where: { id },
       relations: ['user', 'product'],
+      select: {
+        id: true,
+        name: true,
+        custom_name: true,
+        color: true,
+        material: true,
+        size: true,
+        model_type: true,
+        created_at: true,
+        updated_at: true,
+        deleted_at: true,
+        user: {
+          id: true,
+        },
+        product: {
+          id: true,
+        },
+      },
     });
   }
 

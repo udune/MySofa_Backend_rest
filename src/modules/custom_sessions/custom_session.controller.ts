@@ -17,10 +17,10 @@ export class CustomSessionController {
   constructor(private readonly customSessionService: CustomSessionService) {}
 
   @Get(':sessionId')
-  @ApiOperation({ summary: '세션 조회' })
+  @ApiOperation({ summary: '커스텀 세션 조회' })
   @ApiResponse({
     status: 200,
-    description: '세션 조회 성공',
+    description: '커스텀 세션 조회 성공',
     type: CustomSession,
   })
   getCustomSession(

@@ -51,6 +51,8 @@ export class MyItemsController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: '마이아이템 수정' })
+  @ApiResponse({ status: 200, description: '수정 성공', type: MyItem })
   async updateMyItem(
     @Param('id', ParseUUIDPipe)
     id: string,
@@ -61,6 +63,8 @@ export class MyItemsController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: '마이아이템 삭제' })
+  @ApiResponse({ status: 200, description: '삭제 성공' })
   async deleteMyItem(
     @Param('id', ParseUUIDPipe)
     id: string,

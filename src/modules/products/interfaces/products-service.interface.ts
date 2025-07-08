@@ -3,12 +3,12 @@ import { UpdateProductDto } from '../dto/update-product.dto';
 import { Product } from '../entities/product.entity';
 
 export interface IProductsServiceCreate {
-  createProductInput: CreateProductDto;
+  createProductDto: CreateProductDto;
 }
 
 export interface IProductsServiceUpdate {
   id: string;
-  updateProductInput: UpdateProductDto;
+  updateProductDto: UpdateProductDto;
 }
 
 export interface IProductsServiceDelete {

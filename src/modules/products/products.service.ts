@@ -18,19 +18,51 @@ export class ProductsService {
   ) {}
 
   async findAll(): Promise<Product[]> {
-    return this.productRepository.find({ relations: ['my_items'] });
+    return this.productRepository.find({
+      relations: ['my_items'],
+      select: {
+        id: true,
+        name: true,
+        custom_name: true,
+        color: true,
+        material: true,
+        size: true,
+        model_type: true,
+        created_at: true,
+        updated_at: true,
+        deleted_at: true,
+        my_items: {
+          id: true,
+        },
+      },
+    });
   }
 
   findOne({ id }: IProductsServiceFindOne): Promise<Product | null> {
     return this.productRepository.findOne({
       where: { id },
       relations: ['my_items'],
+      select: {
+        id: true,
+        name: true,
+        custom_name: true,
+        color: true,
+        material: true,
+        size: true,
+        model_type: true,
+        created_at: true,
+        updated_at: true,
+        deleted_at: true,
+        my_items: {
+          id: true,
+        },
+      },
     });
   }
 
-  create({ createProductInput }: IProductsServiceCreate): Promise<Product> {
+  create({ createProductDto }: IProductsServiceCreate): Promise<Product> {
     const newProduct = this.productRepository.create({
-      ...createProductInput,
+      ...createProductDto,
     });
 
     return this.productRepository.save(newProduct);
@@ -38,13 +70,13 @@ export class ProductsService {
 
   async update({
     id,
-    updateProductInput,
+    updateProductDto,
   }: IProductsServiceUpdate): Promise<Product | null> {
     const product = await this.findOne({ id });
 
     this.checkExist({ product });
 
-    const update = { ...product, ...updateProductInput };
+    const update = { ...product, ...updateProductDto };
 
     return this.productRepository.save(update);
   }

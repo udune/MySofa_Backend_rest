@@ -19,11 +19,6 @@ async function bootstrap() {
     .setTitle('MySofa API')
     .setDescription('MySofa Rest API 문서 By minchan kim')
     .setVersion('1.0')
-    .addTag('Authentication', '인증 관련 API')
-    .addTag('Users', '사용자 관리 API')
-    .addTag('Products', '상품 관리 API')
-    .addTag('MyItems', '나의 아이템 API')
-    .addTag('CustomSessions', '커스텀 세션 API')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

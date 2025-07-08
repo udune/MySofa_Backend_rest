@@ -49,7 +49,14 @@ export class UsersService {
   async findAll(): Promise<User[]> {
     return this.userRepository.find({
       relations: ['my_items', 'custom_sessions'],
-      select: ['id', 'email', 'nickname', 'role'],
+      select: {
+        id: true,
+        email: true,
+        nickname: true,
+        role: true,
+        created_at: true,
+        updated_at: true,
+      },
     });
   }
 
@@ -58,7 +65,17 @@ export class UsersService {
   }
 
   async findById(id: string): Promise<User | null> {
-    const user = await this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOne({
+      where: { id },
+      select: {
+        id: true,
+        email: true,
+        nickname: true,
+        role: true,
+        created_at: true,
+        updated_at: true,
+      },
+    });
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }

@@ -26,7 +26,7 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_DATABASE'),
         entities: [__dirname + '/modules/**/*.entity.{ts,js}'],
-        synchronize: true,
+        synchronize: false,
         logging: true,
       }),
       inject: [ConfigService],
