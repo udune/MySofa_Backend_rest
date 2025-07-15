@@ -19,6 +19,17 @@ async function bootstrap() {
     .setTitle('MySofa API')
     .setDescription('MySofa Rest API 문서 By minchan kim')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

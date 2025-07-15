@@ -6,9 +6,9 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import {
-  IAuthServiceTokens,
   IAuthServiceGetAccessToken,
   IAuthServiceLogin,
+  IAuthServiceLoginResult,
 } from './interfaces/auth-service.interface';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
@@ -24,7 +24,7 @@ export class AuthService {
   async login({
     email,
     password,
-  }: IAuthServiceLogin): Promise<IAuthServiceTokens> {
+  }: IAuthServiceLogin): Promise<IAuthServiceLoginResult> {
     const user = await this.usersService.findByEmail(email);
     if (!user) {
       throw new UnprocessableEntityException('이메일 검증에 실패했습니다.');
@@ -38,7 +38,10 @@ export class AuthService {
     const accessToken = this.generateAccessToken({ user });
     const refreshToken = this.generateRefreshToken({ user });
 
-    return { accessToken, refreshToken };
+    return {
+      tokens: { accessToken, refreshToken },
+      user,
+    };
   }
 
   generateAccessToken({ user }: IAuthServiceGetAccessToken): string {

@@ -33,21 +33,67 @@ export class AuthController {
     summary: '로그인',
     description: '이메일과 비밀번호로 로그인합니다.',
   })
-  @ApiResponse({ status: 200, description: '로그인 성공' })
+  @ApiResponse({
+    status: 200,
+    description: '로그인 성공',
+    schema: {
+      type: 'object',
+      properties: {
+        message: { type: 'string', example: '로그인 성공' },
+        accessToken: {
+          type: 'string',
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+        },
+        user: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+              format: 'uuid',
+              example: '123e4567-e89b-12d3-a456-426614174000',
+            },
+            email: {
+              type: 'string',
+              format: 'email',
+              example: 'user@example.com',
+            },
+            nickname: {
+              type: 'string',
+              example: '소파왕',
+            },
+            role: {
+              type: 'string',
+              enum: ['USER', 'ADMIN'],
+              example: 'USER',
+            },
+          },
+        },
+      },
+    },
+  })
   @ApiBadRequestResponse({ description: '로그인 실패' })
   async login(
     @Body() dto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
     const { email, password } = dto;
-    const tokens: IAuthServiceTokens = await this.authService.login({
+    const loginResult = await this.authService.login({
       email,
       password,
     });
 
-    this.setAuthCookies(res, tokens);
+    this.setAuthCookies(res, loginResult.tokens);
 
-    return { message: '로그인 성공', accessToken: tokens.accessToken };
+    return {
+      message: '로그인 성공',
+      accessToken: loginResult.tokens.accessToken,
+      user: {
+        id: loginResult.user.id,
+        email: loginResult.user.email,
+        nickname: loginResult.user.nickname,
+        role: loginResult.user.role,
+      },
+    };
   }
 
   @Post('logout')

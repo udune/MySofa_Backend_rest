@@ -11,8 +11,17 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiForbiddenResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { AdminGuard } from '../../common/guards/admin.guard';
 
 @ApiTags('Products')
 @Controller('products')
@@ -41,8 +50,11 @@ export class ProductsController {
   }
 
   @Post()
-  @ApiOperation({ summary: '상품 등록' })
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '상품 등록 (관리자)' })
   @ApiResponse({ status: 201, description: '상품 등록 성공', type: Product })
+  @ApiForbiddenResponse({ description: '관리자 권한이 필요합니다.' })
   async createProduct(
     @Body()
     createProductDto: CreateProductDto,
@@ -51,8 +63,11 @@ export class ProductsController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: '상품 수정' })
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '상품 수정 (관리자)' })
   @ApiResponse({ status: 200, description: '수정 성공', type: Product })
+  @ApiForbiddenResponse({ description: '관리자 권한이 필요합니다.' })
   updateProduct(
     @Param('id', ParseUUIDPipe)
     id: string,
@@ -63,8 +78,11 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: '상품 삭제' })
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '상품 삭제 (관리자)' })
   @ApiResponse({ status: 200, description: '삭제 성공' })
+  @ApiForbiddenResponse({ description: '관리자 권한이 필요합니다.' })
   async deleteProduct(
     @Param('id', ParseUUIDPipe)
     id: string,

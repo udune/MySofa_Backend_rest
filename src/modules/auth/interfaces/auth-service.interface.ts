@@ -13,3 +13,8 @@ export interface IAuthServiceTokens {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface IAuthServiceLoginResult {
+  tokens: IAuthServiceTokens;
+  user: User;
+}
