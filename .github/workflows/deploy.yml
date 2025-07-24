@@ -1,0 +1,34 @@
+name: Deploy to EC2
+
+# Event : 실행되는 시점을 설정
+# main 이라는 브랜치에 push 될 때 아래 workflow를 실행
+on:
+  push:
+    branches:
+      - main
+
+# 하나의 Workflow는 1개 이상의 Job 으로 구성된다.
+# 여러 Job 은 기본적으로 병렬적으로 수행된다.
+jobs:
+  deploy:
+    # ubuntu-latest 환경 / 가장 최신 버전(latest) 의 Ubuntu를 사용
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: action/checkout@v3
+
+      - name: publish
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd ~/MySofa_Backend_rest
+            git pull origin main
+            docker stop mysofa-backend-rest || true
+            docker rm mysofa-backend-rest || true
+            docker rmi mysofa-backend-rest || true
+            docker build -t mysofa-backend-rest .
+            docker run -d -p 3000:3000 --name mysofa-backend-rest mysofa-backend-rest
