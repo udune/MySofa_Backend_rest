@@ -155,7 +155,8 @@ GitHub Actions를 통한 자동 배포가 설정되어 있습니다. `main` 브�
 
 ## 📚 API 문서
 
-서버 실행 후 `http://localhost:3000/api-docs`에서 Swagger API 문서를 확인할 수 있습니다.
+1. `https://api.my-sofa.org/api-docs` 배포된 Swagger API 문서를 확인할 수 있습니다.
+2. 서버 실행 후 `http://localhost:3000/api-docs`에서 Swagger API 문서를 확인할 수 있습니다.
 
 ## 🤝 관련 프로젝트
 
