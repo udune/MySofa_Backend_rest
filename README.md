@@ -1,98 +1,176 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# MySofa Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+MySofa 소파 커스터마이징 플랫폼의 백엔드 REST API 서버입니다. 사용자 인증, 소파 상품 관리, 커스터마이징 세션 저장 등의 핵심 기능을 제공합니다.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🛋️ 프로젝트 소개
 
-## Description
+MySofa는 사용자가 원하는 소파를 실시간으로 커스터마이징하고, 다양한 공간과 조명 환경에서 배치해보며 나만의 스타일을 완성할 수 있는 웹 기반 소파 시뮬레이션 플랫폼입니다.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+이 저장소는 MySofa 플랫폼의 백엔드 API 서버로, NestJS 프레임워크를 기반으로 구축되었습니다.
 
-## Project setup
+## ✨ 주요 기능
+
+### 🔐 사용자 관리
+- JWT 기반 회원가입/로그인/로그아웃
+- 리프레시 토큰을 통한 토큰 갱신
+- 사용자 프로필 관리
+
+### 🛋️ 상품 관리
+- 소파 상품 등록, 수정, 삭제 (관리자)
+- 상품 목록 조회 및 상세 정보 제공
+- 소파 모델별 옵션 관리 (색상, 재질, 크기, 모델 타입)
+
+### 🎨 커스터마이징 세션
+- 사용자별 소파 커스터마이징 결과 저장
+- 커스텀 이름, 색상, 재질, 크기, 모델 타입 설정
+- 사용자의 저장된 커스터마이징 목록 관리
+
+### 📚 API 문서화
+- Swagger를 통한 자동 API 문서 생성
+- `/api-docs` 엔드포인트에서 API 문서 확인 가능
+
+## 🛠️ 기술 스택
+
+| 분야 | 기술 |
+|------|------|
+| **프레임워크** | NestJS, TypeScript |
+| **데이터베이스** | MySQL, TypeORM |
+| **인증** | JWT, Passport |
+| **API 문서** | Swagger/OpenAPI |
+| **검증** | class-validator, class-transformer |
+| **배포** | AWS EC2, Docker |
+| **CI/CD** | GitHub Actions |
+
+## 🚀 시작하기
+
+### 환경 요구사항
+- Node.js 18+
+- MySQL 8.0+
+- npm
+
+### 설치 및 실행
 
 ```bash
+# 의존성 설치
 $ npm install
-```
 
-## Compile and run the project
+# 환경변수 설정
+$ cp .env.example .env
+# .env 파일에서 데이터베이스 연결 정보 등 설정
 
-```bash
-# development
-$ npm run start
-
-# watch mode
+# 개발 모드 실행
 $ npm run start:dev
 
-# production mode
+# 프로덕션 모드 실행
 $ npm run start:prod
 ```
 
-## Run tests
+### 테스트
 
 ```bash
-# unit tests
+# 단위 테스트
 $ npm run test
 
-# e2e tests
+# e2e 테스트
 $ npm run test:e2e
 
-# test coverage
+# 테스트 커버리지
 $ npm run test:cov
 ```
 
-## Deployment
+## 📁 프로젝트 구조
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+```
+src/
+├── common/              # 공통 모듈 (필터, 가드, 파이프 등)
+├── modules/
+│   ├── auth/           # 인증 관련 모듈
+│   ├── users/          # 사용자 관리 모듈
+│   ├── products/       # 상품 관리 모듈
+│   └── custom_sessions/ # 커스터마이징 세션 모듈
+└── main.ts             # 애플리케이션 진입점
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 🌐 API 엔드포인트
 
-## Resources
+### 인증
+- `POST /auth/signup` - 회원가입
+- `POST /auth/login` - 로그인
+- `POST /auth/logout` - 로그아웃
+- `POST /auth/refresh` - 토큰 갱신
 
-Check out a few resources that may come in handy when working with NestJS:
+### 사용자
+- `GET /users/profile` - 사용자 프로필 조회
+- `PUT /users/profile` - 사용자 프로필 수정
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### 상품
+- `GET /products` - 상품 목록 조회
+- `GET /products/:id` - 상품 상세 조회
+- `POST /products` - 상품 등록 (관리자)
+- `PUT /products/:id` - 상품 수정 (관리자)
+- `DELETE /products/:id` - 상품 삭제 (관리자)
 
-## Support
+### 커스터마이징 세션
+- `GET /custom-sessions` - 사용자의 커스터마이징 목록 조회
+- `POST /custom-sessions` - 커스터마이징 결과 저장
+- `PUT /custom-sessions/:id` - 커스터마이징 수정
+- `DELETE /custom-sessions/:id` - 커스터마이징 삭제
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 🔒 환경변수
 
-## Stay in touch
+프로젝트 실행을 위해 다음 환경변수가 필요합니다:
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```env
+# 데이터베이스
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=password
+DB_DATABASE=mysofa
 
-## License
+# JWT
+JWT_SECRET=your_jwt_secret
+JWT_REFRESH_SECRET=your_refresh_secret
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+# 기타
+NODE_ENV=development
+PORT=3000
+```
+
+## 🚀 배포
+
+### Docker 배포
+
+```bash
+# 이미지 빌드
+$ docker build -t mysofa-backend .
+
+# 컨테이너 실행
+$ docker run -d -p 3000:3000 --name mysofa-backend mysofa-backend
+```
+
+### AWS EC2 배포
+
+GitHub Actions를 통한 자동 배포가 설정되어 있습니다. `main` 브랜치에 push하면 자동으로 EC2 서버에 배포됩니다.
+
+## 📚 API 문서
+
+서버 실행 후 `http://localhost:3000/api-docs`에서 Swagger API 문서를 확인할 수 있습니다.
+
+## 🤝 관련 프로젝트
+
+- [MySofa Frontend](https://github.com/udune/MySofa) - React 웹 클라이언트
+- [MySofa Unity](https://github.com/udune/MySofa_Unity) - Unity WebGL 3D 시뮬레이션
+
+## 📄 라이선스
+
+MIT License
+
+## 👥 개발팀
+
+- **백엔드 개발**: minchan kim
+- **API 문서**: minchan kim
+
+---
+
+🛋️ **MySofa**로 나만의 완벽한 소파를 찾아보세요!
