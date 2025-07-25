@@ -22,6 +22,7 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminGuard } from '../../common/guards/admin.guard';
+import { UserGuard } from '@/src/common/guards/user.guard';
 
 @ApiTags('Products')
 @Controller('products')
@@ -29,6 +30,9 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
+  @UseGuards(AuthGuard('jwt'), UserGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '상품 조회' })
   @ApiOperation({ summary: '전체 상품 조회' })
   @ApiResponse({
     status: 201,
@@ -40,8 +44,11 @@ export class ProductsController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'), UserGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: '상품 조회' })
   @ApiResponse({ status: 201, description: '상품 조회 성공', type: Product })
+  @ApiForbiddenResponse({ description: '사용자 권한이 필요합니다.' })
   async getProduct(
     @Param('id', ParseUUIDPipe)
     id: string,
