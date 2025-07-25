@@ -4,12 +4,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MyItem } from './entities/myitem.entity';
 import { Repository } from 'typeorm';
 import {
-  IMyItemsServiceCreate,
   IMyItemsServiceDelete,
   IMyItemsServiceExist,
   IMyItemsServiceFindOne,
   IMyItemsServiceUpdate,
 } from './interfaces/myitems-service.interface';
+import { CreateMyItemDto } from './dto/create-myitem.dto';
 
 @Injectable({ scope: Scope.DEFAULT })
 export class MyItemsService {
@@ -18,8 +18,9 @@ export class MyItemsService {
     private readonly myitemRepository: Repository<MyItem>,
   ) {}
 
-  async findAll(): Promise<MyItem[]> {
+  async findByUserId(userId: string): Promise<MyItem[]> {
     return this.myitemRepository.find({
+      where: { user: { id: userId } },
       relations: ['user', 'product'],
       select: {
         id: true,
@@ -34,10 +35,16 @@ export class MyItemsService {
         deleted_at: true,
         user: {
           id: true,
+          nickname: true,
         },
         product: {
           id: true,
+          name: true,
+          custom_name: true,
         },
+      },
+      order: {
+        created_at: 'DESC',
       },
     });
   }
@@ -59,20 +66,26 @@ export class MyItemsService {
         deleted_at: true,
         user: {
           id: true,
+          nickname: true,
         },
         product: {
           id: true,
+          name: true,
+          custom_name: true,
         },
       },
     });
   }
 
-  create({ createMyitemDto }: IMyItemsServiceCreate): Promise<MyItem> {
-    const { user_id, product_id, ...itemData } = createMyitemDto;
+  async create(
+    createMyitemDto: CreateMyItemDto,
+    userId: string,
+  ): Promise<MyItem> {
+    const { product_id, ...itemData } = createMyitemDto;
 
     return this.myitemRepository.save({
       ...itemData,
-      user: { id: user_id } as any,
+      user: { id: userId } as any,
       product: { id: product_id } as any,
     });
   }
@@ -85,7 +98,7 @@ export class MyItemsService {
 
     this.checkExist({ myitem });
 
-    const { user_id, product_id, ...itemData } = updateMyitemDto;
+    const { user_id, product_id, ...itemData } = updateMyitemDto as any;
 
     const updateData: any = { ...itemData };
     if (user_id) {
@@ -109,7 +122,7 @@ export class MyItemsService {
 
   checkExist({ myitem }: IMyItemsServiceExist): void {
     if (!myitem) {
-      throw new NotFoundException('myitem not found');
+      throw new NotFoundException('마이아이템을 찾을 수 없습니다.');
     }
   }
 }

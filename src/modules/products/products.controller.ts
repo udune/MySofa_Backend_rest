@@ -22,7 +22,7 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminGuard } from '../../common/guards/admin.guard';
-import { UserGuard } from '@/src/common/guards/user.guard';
+import { AllGuard } from '@/src/common/guards/all.guard';
 
 @ApiTags('Products')
 @Controller('products')
@@ -30,7 +30,7 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  @UseGuards(AuthGuard('jwt'), UserGuard)
+  @UseGuards(AuthGuard('jwt'), AllGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: '상품 조회' })
   @ApiOperation({ summary: '전체 상품 조회' })
@@ -44,7 +44,7 @@ export class ProductsController {
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard('jwt'), UserGuard)
+  @UseGuards(AuthGuard('jwt'), AllGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: '상품 조회' })
   @ApiResponse({ status: 201, description: '상품 조회 성공', type: Product })

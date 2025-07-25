@@ -8,11 +8,22 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiForbiddenResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { UserGuard } from '@/src/common/guards/user.guard';
 
 @ApiTags('CustomSession')
 @Controller('custom-session')
+@UseGuards(AuthGuard('jwt'), UserGuard)
+@ApiBearerAuth()
 export class CustomSessionController {
   constructor(private readonly customSessionService: CustomSessionService) {}
 
@@ -23,6 +34,7 @@ export class CustomSessionController {
     description: '커스텀 세션 조회 성공',
     type: CustomSession,
   })
+  @ApiForbiddenResponse({ description: '사용자 권한이 필요합니다.' })
   getCustomSession(
     @Param('sessionId', ParseUUIDPipe)
     sessionId: string,
@@ -37,6 +49,7 @@ export class CustomSessionController {
     description: '세션 저장 성공',
     type: CustomSession,
   })
+  @ApiForbiddenResponse({ description: '사용자 권한이 필요합니다.' })
   createCustomSession(
     @Body()
     createCustomSessionDto: CreateCustomSessionDto,

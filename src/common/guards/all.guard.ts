@@ -5,7 +5,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 
-export class UserGuard implements CanActivate {
+export class AllGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
@@ -14,8 +14,8 @@ export class UserGuard implements CanActivate {
       throw new ForbiddenException('인증이 필요합니다.');
     }
 
-    if (user.role !== UserRole.USER) {
-      throw new ForbiddenException('사용자 권한이 필요합니다.');
+    if (user.role !== UserRole.USER && user.role !== UserRole.ADMIN) {
+      throw new ForbiddenException('사용자 및 관리자 권한이 필요합니다.');
     }
 
     return true;

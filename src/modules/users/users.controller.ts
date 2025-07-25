@@ -10,16 +10,21 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiConflictResponse,
+  ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOperation,
   ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { AdminGuard } from '@/src/common/guards/admin.guard';
 
 @ApiTags('Users')
 @Controller('users')
@@ -43,8 +48,10 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @ApiBearerAuth()
   @ApiOperation({
-    summary: '전체 유저 조회',
+    summary: '전체 유저 조회 (관리자)',
     description: '모든 유저 목록을 조회합니다.',
   })
   @ApiResponse({
@@ -52,13 +59,16 @@ export class UsersController {
     description: '유저 목록 조회 성공',
     type: [User],
   })
+  @ApiForbiddenResponse({ description: '관리자 권한이 필요합니다.' })
   getAllUsers(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @ApiBearerAuth()
   @ApiOperation({
-    summary: '특정 유저 조회',
+    summary: '특정 유저 조회 (관리자)',
     description: 'ID로 특정 유저 정보를 조회합니다.',
   })
   @ApiParam({ name: 'id', description: '유저ID', type: 'string' })
@@ -67,6 +77,7 @@ export class UsersController {
     description: '유저 조회 성공',
     type: User,
   })
+  @ApiForbiddenResponse({ description: '관리자 권한이 필요합니다.' })
   @ApiNotFoundResponse({ description: '유저를 찾을수 없음' })
   async getUser(@Param('id', ParseUUIDPipe) id: string): Promise<User | null> {
     return this.usersService.findById(id);
