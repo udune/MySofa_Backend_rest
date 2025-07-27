@@ -41,11 +41,14 @@ export class CustomSessionController {
 
   @Post()
   @ApiOperation({ summary: '커스텀 세션 생성 또는 수정' })
+  @UseGuards(AuthGuard('jwt'), UserGuard)
+  @ApiBearerAuth()
   @ApiResponse({
     status: 201,
     description: '세션 저장 성공',
     type: CustomSession,
   })
+  @ApiForbiddenResponse({ description: '사용자 권한이 필요합니다.' })
   createCustomSession(
     @Body()
     createCustomSessionDto: CreateCustomSessionDto,

@@ -3,6 +3,15 @@ import { IsNotEmpty, IsString, IsUUID, MaxLength } from 'class-validator';
 
 export class CreateMyItemDto {
   @ApiProperty({
+    description: '사용자 ID',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    format: 'uuid',
+  })
+  @IsNotEmpty({ message: '사용자 ID를 입력해주세요.' })
+  @IsUUID('4', { message: '올바른 사용자 ID 형식이 아닙니다.' })
+  user_id: string;
+
+  @ApiProperty({
     description: '상품 ID',
     example: '123e4567-e89b-12d3-a456-426614174000',
     format: 'uuid',

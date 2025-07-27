@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { Injectable, NotFoundException, Scope } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  Scope,
+  BadRequestException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MyItem } from './entities/myitem.entity';
 import { Repository } from 'typeorm';
@@ -77,15 +83,23 @@ export class MyItemsService {
     });
   }
 
-  async create(
-    createMyitemDto: CreateMyItemDto,
-    userId: string,
-  ): Promise<MyItem> {
-    const { product_id, ...itemData } = createMyitemDto;
+  async create(createMyitemDto: CreateMyItemDto): Promise<MyItem> {
+    const { user_id, product_id, ...itemData } = createMyitemDto;
+
+    // 1. 사용자당 최대 아이템 수 확인 (예: 100개 제한)
+    const userItemCount = await this.myitemRepository.count({
+      where: { user: { id: user_id } },
+    });
+
+    if (userItemCount >= 5) {
+      throw new BadRequestException(
+        '사용자당 최대 5개의 마이아이템만 생성할 수 있습니다.',
+      );
+    }
 
     return this.myitemRepository.save({
       ...itemData,
-      user: { id: userId } as any,
+      user: { id: user_id } as any,
       product: { id: product_id } as any,
     });
   }
