@@ -85,27 +85,21 @@ export class MyItemsController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'), UserGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: '마이아이템 수정 (사용자)' })
+  @ApiOperation({ summary: '마이아이템 수정' })
   @ApiResponse({ status: 200, description: '수정 성공', type: MyItem })
-  @ApiForbiddenResponse({ description: '본인의 아이템만 수정할 수 있습니다.' })
   async updateMyItem(
     @Param('id', ParseUUIDPipe)
     id: string,
     @Body()
     updateMyitemDto: UpdateMyItemDto,
-    @Request()
-    req,
   ): Promise<MyItem | null> {
-    const userId = req.user.id;
     const item = await this.myitemsService.findOne({ id });
 
     if (!item) {
       return null;
     }
 
-    if (!item.user || item.user.id !== userId) {
+    if (!item.user || item.user.id !== updateMyitemDto.user_id) {
       throw new ForbiddenException('본인의 아이템만 수정할 수 있습니다.');
     }
 
