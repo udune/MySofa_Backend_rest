@@ -11,3 +11,8 @@ export interface ICustomSessionServiceFindOneBySessionId {
 export interface ICustomSessionServiceCreate {
   createCustomSessionDto: CreateCustomSessionDto;
 }
+
+export interface ICustomSessionServiceCreateFromMyItem {
+  myitemId: string;
+  userId: string;
+}

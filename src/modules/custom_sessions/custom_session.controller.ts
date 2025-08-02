@@ -8,11 +8,13 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiForbiddenResponse,
+  ApiNotFoundResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -56,5 +58,27 @@ export class CustomSessionController {
     return this.customSessionService.create({
       createCustomSessionDto,
     });
+  }
+
+  @Post('myitem/:myitemId')
+  @ApiOperation({ summary: 'MyItem 기반 커스텀 세션 생성' })
+  @UseGuards(AuthGuard('jwt'), UserGuard)
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 201,
+    description: 'MyItem 세션 생성 성공',
+    type: CustomSession,
+  })
+  @ApiForbiddenResponse({ description: '사용자 권한이 필요합니다.' })
+  @ApiNotFoundResponse({ description: 'MyItem을 찾을 수 없습니다.' })
+  async createMyItemSession(
+    @Param('myitemId', ParseUUIDPipe)
+    myitemId: string,
+    @Request()
+    req,
+  ): Promise<CustomSession | null> {
+    const userId = req.user.id;
+
+    return this.customSessionService.createFromMyItem({ myitemId, userId });
   }
 }
